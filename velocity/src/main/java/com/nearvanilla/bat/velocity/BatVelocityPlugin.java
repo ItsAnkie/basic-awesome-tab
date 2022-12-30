@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.nearvanilla.bat.velocity.command.Commands;
 import com.nearvanilla.bat.velocity.listener.LuckPermsListener;
+import com.nearvanilla.bat.velocity.listener.VelocityVanishListener;
 import com.nearvanilla.bat.velocity.tab.TablistService;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
@@ -70,6 +71,8 @@ public class BatVelocityPlugin {
 
         this.commands = this.injector.getInstance(Commands.class);
         this.commands.register();
+
+        this.server.getEventManager().register(this, this.injector.getInstance(VelocityVanishListener.class));
 
         if (this.server.getPluginManager().isLoaded("LuckPerms")) {
             this.server.getEventManager().register(this, this.injector.getInstance(LuckPermsListener.class));
