@@ -1,5 +1,6 @@
 package com.nearvanilla.bat.velocity.tab;
 
+import com.nearvanilla.bat.velocity.tab.group.GroupProvider;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.player.TabList;
 import com.velocitypowered.api.proxy.player.TabListEntry;
@@ -24,11 +25,11 @@ public class Tablist {
     /**
      * Constructs {@code Tablist}.
      *
-     * @param logger               the logger
-     * @param tablistService       the tablist service
-     * @param serverDataProvider   the server data provider
-     * @param headerFormatStrings  a list containing the tablist's header
-     * @param footerFormatStrings  a list containing the tablist's footer
+     * @param logger              the logger
+     * @param tablistService      the tablist service
+     * @param serverDataProvider  the server data provider
+     * @param headerFormatStrings a list containing the tablist's header
+     * @param footerFormatStrings a list containing the tablist's footer
      */
     public Tablist(final @NonNull Logger logger,
                    final @NonNull TablistService tablistService,
@@ -68,9 +69,12 @@ public class Tablist {
      * @return the list of tablist entries
      */
     public @NonNull List<TabListEntry> entries(final @NonNull TabList tabList) {
-        return profileEntries
+        @NonNull final GroupProvider groupProvider = this.serverDataProvider.groupProvider();
+        final Comparator<GameProfile> groupWeightComparator = Comparator.comparing(gameProfile -> groupProvider.primaryGroupWeight(gameProfile.getId()));
+        return this.profileEntries
                 .stream()
                 .sorted(Comparator.comparing(GameProfile::getName))
+                .sorted(groupWeightComparator.reversed())
                 .map(gameProfile ->
                         TabListEntry.builder()
                                 .latency(this.tablistService.ping(gameProfile.getId()))

@@ -6,6 +6,7 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.query.Flag;
 import net.luckperms.api.query.QueryOptions;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.*;
 
@@ -43,6 +44,35 @@ public class LuckPermsGroupProvider implements GroupProvider {
                 .stream()
                 .map(Group::getName)
                 .toList();
+    }
+
+    @Override
+    public @Nullable String primaryGroup(@NonNull final UUID uuid) {
+        final User user = this.luckPerms.getUserManager().getUser(uuid);
+
+        if (user == null) {
+            return null;
+        }
+
+        return user.getPrimaryGroup();
+    }
+
+    @Override
+    public int primaryGroupWeight(@NonNull final UUID uuid) {
+        final User user = this.luckPerms.getUserManager().getUser(uuid);
+
+        if (user == null) {
+            return 0;
+        }
+
+        final String primaryGroupName = user.getPrimaryGroup();
+        final @Nullable Group primaryGroup = this.luckPerms.getGroupManager().getGroup(primaryGroupName);
+
+        if (primaryGroup == null) {
+            return 0;
+        }
+
+        return primaryGroup.getWeight().orElse(0);
     }
 
     public LuckPermsGroupMeta getHighestWeightGroup(final @NonNull UUID uuid) {

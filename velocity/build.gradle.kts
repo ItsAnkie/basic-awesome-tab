@@ -3,7 +3,7 @@ dependencies {
     annotationProcessor(libs.velocity.api)
 
     compileOnly(libs.luckperms)
-    compileOnly(files("${project.projectDir}/libs/VelocityVanish.v3.10.2.jar"))
+    compileOnly(files("${project.projectDir}/libs/VelocityVanish.v3.11.1.jar"))
 
     implementation(libs.cloud.velocity)
     implementation(libs.cloud.annotations)

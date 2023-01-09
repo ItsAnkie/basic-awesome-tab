@@ -15,9 +15,11 @@ public class VelocityVanishListener {
 
     @Inject
     public VelocityVanishListener(final @NonNull ProxyServer server,
-                             final @NonNull TablistService tablistService) {
+                                  final @NonNull TablistService tablistService) {
         this.server = server;
         this.tablistService = tablistService;
+
+
     }
 
     @Subscribe
@@ -26,7 +28,7 @@ public class VelocityVanishListener {
         if (event.getPlayer().isEmpty()) return;
 
         System.out.println("Leaving in vanish");
-        tablistService.handlePlayerLeave(event.getPlayer().get());
+        this.tablistService.handlePlayerLeave(event.getPlayer().get());
     }
 
     @Subscribe
@@ -35,7 +37,6 @@ public class VelocityVanishListener {
         if (event.getPlayer().isEmpty()) return;
 
         System.out.println("Joining in vanish");
-        tablistService.handleServerConnection(event.getPlayer().get());
+        this.tablistService.handleServerConnection(event.getPlayer().get());
     }
-
 }

@@ -72,9 +72,12 @@ public class BatVelocityPlugin {
         this.commands = this.injector.getInstance(Commands.class);
         this.commands.register();
 
-        this.server.getEventManager().register(this, this.injector.getInstance(VelocityVanishListener.class));
-
+        if (this.server.getPluginManager().isLoaded("velocityvanish")) {
+            this.logger.info("VelocityVanish found! hook enabled.");
+            this.server.getEventManager().register(this, this.injector.getInstance(VelocityVanishListener.class));
+        }
         if (this.server.getPluginManager().isLoaded("LuckPerms")) {
+            this.logger.info("LuckPerms found! hook enabled.");
             this.server.getEventManager().register(this, this.injector.getInstance(LuckPermsListener.class));
         }
     }
